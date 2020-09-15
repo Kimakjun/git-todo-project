@@ -26,7 +26,7 @@ User.create = async ({email, password, nick})=> {
     try{
         const user = await poll.query('INSERT INTO user (email, password, nick) VALUES(?, ?, ?)',
         [email, password, nick]);
-        return user;
+        return user[0];
     }catch(err){
         console.log(err);
     }

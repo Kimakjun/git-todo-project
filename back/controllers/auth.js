@@ -1,11 +1,12 @@
 const User = require('../model/user');
+const Column = require('../model/column');
 const createError = require('http-errors');
 const bcrypt = require('bcrypt');
 
 exports.register = async (req, res, next) => {
 
     //TODO: email, password, nick 유효성검사.
-
+    // 회원가입시 기본컬럼 세팅.
     const {email, password,nick} = req.body;
 
     try{
@@ -14,7 +15,9 @@ exports.register = async (req, res, next) => {
         
         const hash = await bcrypt.hash(password, 12);
         newUser = await User.create({ email, password: hash, nick});
-        
+        console.log(newUser.insertId);
+        await Column.create({userId: newUser.insertId, type: "init"});
+
         res.status(200).json({message: 'login success'});
     }catch(err){
         next(createError(500, 'server Error'));
