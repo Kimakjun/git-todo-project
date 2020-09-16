@@ -14,3 +14,11 @@
 ### 회원가입, login, logout 구현
 ### session 이용하여 login 검증
 
+
+## day3
+
+### card, board 관련 api 작성.
+
+
+
+

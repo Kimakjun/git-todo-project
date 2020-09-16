@@ -37,8 +37,8 @@ CREATE TABLE `card` (
 -- );
 
 -- 외래키 추가 
-ALTER TABLE `card` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-ALTER TABLE `card` ADD FOREIGN KEY (`column_id`) REFERENCES `board` (`id`);
+ALTER TABLE `card` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) on delete cascade;
+ALTER TABLE `card` ADD FOREIGN KEY (`column_id`) REFERENCES `board` (`id`) on delete cascade;
 
 ALTER TABLE `board` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
