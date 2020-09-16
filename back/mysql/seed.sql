@@ -32,17 +32,21 @@ CREATE TABLE `card` (
 );
 
 -- mysql '' 인식 못해서 `` 사용
--- CREATE TABLE `activity` (
---     `id` int(11) NOT NULL,
---     state varchar(255) NOT NULL
--- );
+CREATE TABLE `logs` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `user_id` int(11) NOT NULL,
+    `action` varchar(255) NOT NULL,
+    `from` varchar(255),
+    `to` varchar(255),
+    `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(`id`)
+);
 
 -- 외래키 추가 
 ALTER TABLE `card` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) on delete cascade;
 ALTER TABLE `card` ADD FOREIGN KEY (`column_id`) REFERENCES `board` (`id`) on delete cascade;
-
 ALTER TABLE `board` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-
+ALTER TABLE `logs` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) 
 -- 기본: default 값 컬럼 설정.
 -- fix : utf8 설정필요.
 

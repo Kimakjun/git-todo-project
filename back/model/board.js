@@ -41,6 +41,25 @@ Board.create = async({userId, type, title})=>{
     }
 }
 
+Board.updateTitleById = async({title, id})=>{
+    try{
+        await pool.query('update board set title = ? where id = ?',[title, id]);
+    }catch(err){
+        console.error(err);
+        throw new Error('sql Error');
+    }
+}
+
+Board.updateCountById = async({count, id})=>{
+    try{
+        await pool.query('update board set count = count + ? where id = ?',[count, id]);
+    }catch(err){
+        console.error(err);
+        throw new Error('sql Error');
+    }
+}
+
+
 Board.deleteById = async({id})=>{
     try{
         await pool.query('delete from board where id = ?', [id]);
