@@ -12,7 +12,7 @@ CREATE TABLE `user` (
      PRIMARY KEY(`id`)
 );
 
-CREATE TABLE `column` (
+CREATE TABLE `board` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `user_id` int(11) NULL,
     `count` int(11) NOT NULL default 0, 
@@ -38,9 +38,9 @@ CREATE TABLE `card` (
 
 -- 외래키 추가 
 ALTER TABLE `card` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-ALTER TABLE `card` ADD FOREIGN KEY (`column_id`) REFERENCES `column` (`id`);
+ALTER TABLE `card` ADD FOREIGN KEY (`column_id`) REFERENCES `board` (`id`);
 
-ALTER TABLE `column` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+ALTER TABLE `board` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 -- 기본: default 값 컬럼 설정.
 -- fix : utf8 설정필요.
