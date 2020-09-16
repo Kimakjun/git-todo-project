@@ -14,3 +14,14 @@
 ### 회원가입, login, logout 구현
 ### session 이용하여 login 검증
 
+
+## day3
+
+### card, board 관련 api 작성.
+### board 추가, 삭제 미들웨어 작성
+### board card 생성하기 
+### board 에 card 추가하기(맨앞, 사이, 맨끝)
+### 임의로 값 생성후 구현라우터 테스트
+
+
+

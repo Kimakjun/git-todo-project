@@ -1,5 +1,5 @@
 const User = require('../model/user');
-const Column = require('../model/column');
+const Board = require('../model/board');
 const createError = require('http-errors');
 const bcrypt = require('bcrypt');
 
@@ -15,8 +15,7 @@ exports.register = async (req, res, next) => {
         
         const hash = await bcrypt.hash(password, 12);
         newUser = await User.create({ email, password: hash, nick});
-        console.log(newUser.insertId);
-        await Column.create({userId: newUser.insertId, type: "init"});
+        await Board.create({userId: newUser.insertId, type: "init"});
 
         res.status(200).json({message: 'login success'});
     }catch(err){
@@ -59,10 +58,11 @@ exports.routing = (req, res, next) => {
 
 }
 
-exports.isLoggedIn = (req, res, next) => {
+exports.isLoggedIn = async(req, res, next) => {
     // login 된 사용자면 user 정보 복구해서 next;
     if(!req.session.userId) return res.json({success: 'fail', message: 'require login'});
-    req.user = User.findById(req.session.id);
+    const result = await User.findById(req.session.userId);
+    req.user = result[0];
     next();
 
 }

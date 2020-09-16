@@ -11,4 +11,5 @@ router.post('/register', isNotLoggedIn, register);
 router.post('/login', isNotLoggedIn, login);
 router.get('/logout', isLoggedIn, logout);
 
+
 module.exports = router;

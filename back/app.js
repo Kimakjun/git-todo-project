@@ -13,6 +13,7 @@ const app = express();
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.set('port', process.env.PORT || 8001);
 app.use(session(sessionOption));
@@ -22,6 +23,7 @@ app.use('/api/v1/', rootRouter);
 
 
 // TODO: ERROR 처리 라우터
+
 
 
 app.listen(app.get('port'), () => {
