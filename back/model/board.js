@@ -22,5 +22,13 @@ Board.create = async ({userId, type, title})=>{
     }
 }
 
+Board.deleteById = async({id})=>{
+    try{
+        await pool.query('delete from board where id = ?', [id]);
+    }catch(err){
+        console.error(err);
+    }
+}
+
 
 module.exports = Board;

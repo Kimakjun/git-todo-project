@@ -25,8 +25,9 @@ CREATE TABLE `card` (
     `user_id` int(11) NOT NULL,
     `column_id` int(11) NOT NULL, 
     `content` text NOT NULL,
-    `head` boolean default true,
-    `next` int(11) default 0,
+    `position` FLOAT,
+    -- `head` boolean default true,
+    -- `next` int(11) default 0,
     PRIMARY KEY(`id`)
 );
 
