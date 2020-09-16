@@ -1,16 +1,19 @@
 const express = require('express');
 const { isLoggedIn } = require('../controllers/auth');
 const { getBoard, 
+        postBoard,
         postCard,
-        deleteBoard } = require('../controllers/board');
+        deleteBoard,
+        moveCard
+        } = require('../controllers/board');
 const router = express.Router();
 
 // // GET /BOARD   RESPONSE {STATUS, MESSAGE, DATA}
 // // DATA board: {title, count, card{}[]}[] 
-// router.get('/', isLoggedIn, getBoard);
+router.get('/', isLoggedIn, getBoard);
 
-// // POST /BOARD RESPONSE {STATUS, MESSAGE, DATA}
-// router.post('/', isLoggedIn, postBoard);
+// POST /BOARD RESPONSE {STATUS, MESSAGE, DATA}
+router.post('/', isLoggedIn, postBoard);
 
 // POST /BOARD/5/CARDS
 router.post('/:id/card', isLoggedIn, postCard);
@@ -22,7 +25,7 @@ router.post('/:id/card', isLoggedIn, postCard);
 // DELETE /BOARD/1 REQ PARAMS.BOARDID 
 router.delete('/:id', isLoggedIn, deleteBoard);
 
-// // 카드이동 PATCH/2/CARD REQ
-// router.patch('/:id/card', isLoggedIn, moveCard);
+// // 카드이동 PATCH/2/CARD REQ {precardId, nextcardId};
+router.patch('/:id/card', isLoggedIn, moveCard);
 
 module.exports = router;

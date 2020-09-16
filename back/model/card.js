@@ -41,4 +41,21 @@ Card.updateCard = async({id, content})=> {
 
 }
 
+Card.updatePosition = async({id, boardId,position})=>{
+    try{
+        await pool.query('update card set position = ?, column_id = ? where id = ?', [position, boardId, id]);
+    }catch(err){
+        console.error(err);
+    }
+}
+
+Card.getCardById = async({cardId})=>{
+    try{
+        const [row, field] = await pool.query('select * from card where id = ?', [cardId]);
+        return row[0];
+    }catch(err){
+        console.error(err);
+    }
+}
+
 module.exports = Card;
