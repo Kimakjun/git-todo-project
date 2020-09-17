@@ -4,11 +4,12 @@ const {register,
        logout, 
        isLoggedIn,
        isNotLoggedIn,
-       routing} = require('../controllers/auth');
+       } = require('../controllers/auth');
+const {validateInputs} = require('../controllers/board')
 const router = express.Router();
 
-router.post('/register', isNotLoggedIn, register);
-router.post('/login', isNotLoggedIn, login);
+router.post('/register', isNotLoggedIn, validateInputs({type : "register"}), register);
+router.post('/login', isNotLoggedIn, validateInputs({type : "login"}), login);
 router.get('/logout', isLoggedIn, logout);
 
 
