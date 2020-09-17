@@ -31,7 +31,7 @@ CREATE TABLE `card` (
     PRIMARY KEY(`id`)
 );
 
--- mysql '' 인식 못해서 `` 사용
+
 CREATE TABLE `logs` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `user_id` int(11) NOT NULL,
