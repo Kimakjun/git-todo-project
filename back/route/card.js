@@ -7,7 +7,7 @@ const router = express.Router();
 
 // 카드 삭제 =>
 router.delete('/:id', deleteCard, postLog);
-router.put('/:id/content', validateInputs, updateCard, postLog);
+router.put('/:id/content', validateInputs({type : "content"}), updateCard, postLog);
 
 
 
