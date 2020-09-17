@@ -8,22 +8,25 @@ exports.updateCard = async (req, res, next)=> {
         const {content} = req.body 
         const id = req.params.id;
         await Card.updateCard({id, content});
-        res.status(200).json({success : true, message : 'card title updated'});
-
+        req.logInfo = {userId: req.user.id, content: content, action: 'updated', from: '', to: ''};
+        next();
+        // res.status(200).json({success : true, message : 'card title updated'});    
     }catch(err){
         console.error(err);
         next(err);
     }
 
 }
-
+// {userId, content, action, from, to}
 exports.deleteCard = async (req, res, next)=> {
     try{
-        const {boardId} = req.body;
+        const {boardId, content, boardTitle} = req.body;
         const id = req.params.id;
         await Card.deleteCard(id);    //카드삭제
         await Board.updateCountById({count: -1, id : boardId}) //board Count update.
-        res.status(200).json({success : true, message : 'card deleted'});
+        req.logInfo = {userId: req.user.id, content: content, action: 'deleted', from: boardTitle, to: ''};
+        next();
+        // res.status(200).json({success : true, message : 'card deleted'});
     }catch(err){
         console.error(err);
         next(err);

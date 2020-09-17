@@ -1,5 +1,4 @@
 const express = require('express');
-const { isLoggedIn } = require('../controllers/auth');
 const { getBoard, 
         postBoard,
         postCard,
@@ -7,6 +6,7 @@ const { getBoard,
         moveCard,
         updateBoardTitle
         } = require('../controllers/board');
+const {postLog} = require('../controllers/logs');
 const router = express.Router();
 
 // // GET /BOARD   RESPONSE {STATUS, MESSAGE, DATA}
@@ -14,9 +14,9 @@ const router = express.Router();
 // TODO: api 설계 문서로 남기기.
 router.get('/', getBoard);
 router.post('/', postBoard);
-router.post('/:id/card', postCard); 
+router.post('/:id/card', postCard, postLog); 
 router.delete('/:id', deleteBoard);
 router.patch('/:id/title', updateBoardTitle);
-router.patch('/:id/card', moveCard);
+router.patch('/:id/card', moveCard, postLog);
 
 module.exports = router;

@@ -36,8 +36,9 @@ CREATE TABLE `logs` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `user_id` int(11) NOT NULL,
     `action` varchar(255) NOT NULL,
-    `from` varchar(255),
-    `to` varchar(255),
+    `content` varchar(255) NOT NULL,
+    `pre` varchar(255),
+    `next` varchar(255),
     `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(`id`)
 );

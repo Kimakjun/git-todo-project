@@ -60,7 +60,7 @@ exports.routing = (req, res, next) => {
 
 exports.isLoggedIn = async(req, res, next) => {
     // login 된 사용자면 user 정보 복구해서 next;
-    if(!req.session.userId) return res.json({success: 'fail', message: 'require login'});
+    if(!req.session.userId) return next(createError(400, 'require login'));
     const result = await User.findById(req.session.userId);
     req.user = result[0];
     next();
@@ -70,6 +70,13 @@ exports.isLoggedIn = async(req, res, next) => {
 exports.isNotLoggedIn = (req, res, next) => {
 
     if(!req.session.userId) return next();
-    return res.json({success: 'fail', message: 'require logout'});
+    return next(createError(404, 'require logout'));
 
+}
+
+
+exports.validateInputs = ({body, params, query}) => {
+    return (req, res, next) => {
+
+    }
 }

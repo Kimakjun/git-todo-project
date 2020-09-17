@@ -1,4 +1,5 @@
 const express = require('express');
+const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const path = require('path');
@@ -7,6 +8,7 @@ const sessionOption = require('./config/session');
 require('dotenv').config();
 
 const rootRouter = require('./route');
+
 
 const app = express();
 
@@ -23,6 +25,16 @@ app.use('/api/v1/', rootRouter);
 
 
 // TODO: ERROR 처리 라우터
+
+app.use((req, res, next) => {
+    next(createError(404, 'page not found!'));
+  });
+
+app.use((err, req, res, next) => {
+    console.log('test');
+    const {status = 500, message = 'server error'} = err;
+    res.status(status).send({message});
+});
 
 
 
