@@ -25,11 +25,11 @@
 
 ## day4
 
- logs middleware 작성
-1. 데이터 유효성 판단 util 폴더 작성.
-2. validate 미들웨어 연결 및 테스트 
-3. api 동작 테스트 
-4. pm2 cluster 사용해서 멀티코어로 돌아가도록 설정
-5. redis 이용하여 session 디비에 저장. 세션 공유안되는 문제 해결 
+1. logs middleware 작성
+2. 데이터 유효성 판단 util 폴더 작성.
+3. validate 미들웨어 연결 및 테스트 
+4. api 동작 테스트 
+5. pm2 cluster 사용해서 멀티코어로 돌아가도록 설정
+6. redis 이용하여 session 디비에 저장. 세션 공유안되는 문제 해결 
 
 
