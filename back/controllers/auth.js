@@ -24,17 +24,19 @@ exports.register = async (req, res, next) => {
 exports.login = async(req, res, next) => {
 
     const {email, password} = req.body;
-    const checkUser = await User.findByEmail(email);
-
-    if(!checkUser[0]) return next(createError(400, 'none exist'));
-
-    const result = bcrypt.compare(password, checkUser[0].password);
-    if(!result) return next(createError(400, 'password incorrect'));
-
-    // session 설정.
-    req.session.userId = checkUser[0].id;
-
-    res.status(200).json({message: 'login success'});
+    try{
+        const checkUser = await User.findByEmail(email);
+        if(!checkUser[0]) return next(createError(400, 'none exist'));
+    
+        const result = bcrypt.compare(password, checkUser[0].password);
+        if(!result) return next(createError(400, 'password incorrect'));
+    
+        // session 설정.
+        req.session.userId = checkUser[0].id;
+        res.status(200).json({message: 'login success'});
+    }catch(err){
+        next(createError(500, 'server Error'));
+    }
 
 };
 
