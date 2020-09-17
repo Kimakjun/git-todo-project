@@ -4,28 +4,19 @@ const { getBoard,
         postBoard,
         postCard,
         deleteBoard,
-        moveCard
+        moveCard,
+        updateBoardTitle
         } = require('../controllers/board');
 const router = express.Router();
 
 // // GET /BOARD   RESPONSE {STATUS, MESSAGE, DATA}
 // // DATA board: {title, count, card{}[]}[] 
-router.get('/', isLoggedIn, getBoard);
-
-// POST /BOARD RESPONSE {STATUS, MESSAGE, DATA}
-router.post('/', isLoggedIn, postBoard);
-
-// POST /BOARD/5/CARDS
-router.post('/:id/card', isLoggedIn, postCard);
-
-// // PATCH /BOARD/5 REQ PARAMFS.BOARDID  
-// router.patch('/:id/title', isLoggedIn, updateBoard);
-// router.patch('/:id/count', isLoggedIn, updateBoard);
-
-// DELETE /BOARD/1 REQ PARAMS.BOARDID 
-router.delete('/:id', isLoggedIn, deleteBoard);
-
-// // 카드이동 PATCH/2/CARD REQ {precardId, nextcardId};
-router.patch('/:id/card', isLoggedIn, moveCard);
+// TODO: api 설계 문서로 남기기.
+router.get('/', getBoard);
+router.post('/', postBoard);
+router.post('/:id/card', postCard); 
+router.delete('/:id', deleteBoard);
+router.patch('/:id/title', updateBoardTitle);
+router.patch('/:id/card', moveCard);
 
 module.exports = router;

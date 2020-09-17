@@ -36,6 +36,21 @@ exports.postBoard = async(req, res, next) => {
 
 }
 
+
+exports.updateBoardTitle = async (req, res, next)=> {
+    const id = req.params.id;
+    const {title} = req.body;
+    try{
+        await Board.updateTitleById({title, id});
+        res.status(200).json({success: true, message: 'update success'});
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
+
+}
+
+
 exports.deleteBoard = async (req, res, next) => {
 
     const boardId = req.params.id;
@@ -79,7 +94,7 @@ exports.postCard = async (req, res, next) => {
 exports.moveCard = async(req, res, next)=> {
 
     const [INITPOSITION, MAKEHALF, ADDONE] = [1, 2, 3]; 
-    const {preCardId, cardId, nextCardId} = req.body;
+    const {preCardId, cardId, nextCardId, preBoardId} = req.body;
     const boardId = req.params.id;
     // 카드가 아무것도 없는 곳으로 이동하는경우 => position 설정
     try{  const cards = await Card.getCards(req.user.id, boardId);
@@ -105,7 +120,11 @@ exports.moveCard = async(req, res, next)=> {
             const newPosition = preCard.position + ADDONE; 
             await Card.updatePosition({id: cardId, boardId: boardId, position: newPosition});
         }
-    
+        
+        // board count 수정.
+        await Board.updateCountById({count: -1, id: preBoardId});
+        await Board.updateCountById({count: 1, id: boardId})
+
         return res.status(200).json({success: true, message: 'card moved !'});
         
     }catch(err){
