@@ -135,7 +135,7 @@ exports.moveCard = async(req, res, next)=> {
         
     }catch(err){
         console.error(err);
-        next(err);
+        next(createError(500, 'server error'));
     }
   
 };

@@ -1,6 +1,6 @@
 const Board = require('../model/board');
 const Card = require('../model/card');
-
+const createError = require('http-errors');
 
 exports.updateCard = async (req, res, next)=> {
     try{
@@ -12,8 +12,7 @@ exports.updateCard = async (req, res, next)=> {
         next();
         // res.status(200).json({success : true, message : 'card title updated'});    
     }catch(err){
-        console.error(err);
-        next(err);
+        next(createError(500, 'server error'));
     }
 
 }
@@ -28,8 +27,7 @@ exports.deleteCard = async (req, res, next)=> {
         next();
         // res.status(200).json({success : true, message : 'card deleted'});
     }catch(err){
-        console.error(err);
-        next(err);
+        next(createError(500, 'server error'));
     }
 
 
