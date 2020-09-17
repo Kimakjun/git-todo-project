@@ -4,7 +4,8 @@ const { getBoard,
         postCard,
         deleteBoard,
         moveCard,
-        updateBoardTitle
+        updateBoardTitle,
+        validateInputs
         } = require('../controllers/board');
 const {postLog} = require('../controllers/logs');
 const router = express.Router();
@@ -13,10 +14,10 @@ const router = express.Router();
 // // DATA board: {title, count, card{}[]}[] 
 // TODO: api 설계 문서로 남기기.
 router.get('/', getBoard);
-router.post('/', postBoard);
-router.post('/:id/card', postCard, postLog); 
+router.post('/',validateInputs({type : "title"}), postBoard);
+router.post('/:id/card',validateInputs({type : "content"}), postCard, postLog); 
 router.delete('/:id', deleteBoard);
-router.patch('/:id/title', updateBoardTitle);
+router.patch('/:id/title',validateInputs({type : "title"}), updateBoardTitle);
 router.patch('/:id/card', moveCard, postLog);
 
 module.exports = router;

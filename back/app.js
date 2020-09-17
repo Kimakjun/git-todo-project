@@ -31,7 +31,6 @@ app.use((req, res, next) => {
   });
 
 app.use((err, req, res, next) => {
-    console.log('test');
     const {status = 500, message = 'server error'} = err;
     res.status(status).send({message});
 });

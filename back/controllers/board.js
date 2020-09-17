@@ -1,6 +1,8 @@
 const Card = require('../model/card');
 const Board = require('../model/board');
 const createError = require('http-errors');
+const {isContent, isTitle, isEmail, isNick, isPassword} = require('../util/validator');
+
 exports.getBoard = async (req, res, next) => {
 
     // 페이지 초기에 사용자가 요청하는 정보.
@@ -100,6 +102,7 @@ exports.moveCard = async(req, res, next)=> {
     const {preCardId, cardId, nextCardId, preBoardId, content, preBoardTitle, boardTitle} = req.body;
     const boardId = req.params.id;
     // 카드가 아무것도 없는 곳으로 이동하는경우 => position 설정
+    // TODO : 로직수정, FRONT 에서 주는 정보에다라 DB 접근할 필요없을듯.
     try{  
         const cards = await Card.getCards(req.user.id, boardId);
         if(cards.length === 0){
@@ -139,3 +142,17 @@ exports.moveCard = async(req, res, next)=> {
     }
   
 };
+
+
+exports.validateInputs = ({type}) => {
+    const checkType = type;
+    return (req, res, next)=>{
+        const {title, content, email, nick, password} = req.body;
+        if(checkType === 'title' && isTitle(title)) return next();
+        if(checkType === 'content' && isContent(content)) return next();
+        if(checkType === 'register' && isEmail(email) && isPassword(password) && isNick(nick)) return next();
+        if(checkType === 'login' && isEmail(email) && isPassword(password)) return next(); 
+        return next(createError(400, 'invalid inputs'))
+    }
+}
+

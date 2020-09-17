@@ -15,3 +15,13 @@ exports.isPassword=(maybePw)=>{
 exports.isNick=(maybeNick)=>{
     return Regex.nick.test(maybeNick);
 }
+
+exports.isTitle=(maybeTitle)=>{
+    return maybeTitle.length > 0 && maybeTitle.length < 30;
+}
+
+exports.isContent=(maybeContent)=>{
+    const contentLength =  maybeContent.replace(/\s/gi, "").length; 
+    return (contentLength > 0 && contentLength <= 500);
+}
+

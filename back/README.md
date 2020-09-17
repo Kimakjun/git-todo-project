@@ -26,6 +26,9 @@
 ## day4
 
 ### logs middleware 작성
+### 데이터 유효성 판단 util 폴더 작성.
+### validate 미들웨어 연결 및 테스트 
 ### api 동작 테스트 
 ### FE 로그인 로그아웃 작성
+
 
