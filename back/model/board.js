@@ -10,7 +10,7 @@ Board.getBoard = async({userId})=>{
         const [rows, field] = await pool.query('select * from board where user_id = ? ', [userId]);
         return rows;
     }catch(err){
-        console.error(err);
+        throw new Error(err);
     }
 }
 
@@ -19,7 +19,7 @@ Board.getBoardById = async({userId, boardId})=>{
         const [rows, field] = await pool.query(`select * from board where user_id = ? and id = ?`,[userId, boardId]);
         return rows;
     }catch(err){
-        console.error(err);
+        throw new Error(err);
     }
 }
 
