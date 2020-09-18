@@ -2,7 +2,6 @@ const Log = require('../model/logs');
 const createError = require('http-errors');
 
 exports.getLog = async(req, res, next) => {
-
     try{        
         const userId = req.user.id;
         const logs = await Log.getLogsById({userId});
