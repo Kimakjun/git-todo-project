@@ -37,6 +37,7 @@ app.use(session({
     cookie: {
     maxAge: 24000 * 60 * 60 // 쿠키 유효기간 24시간
     },
+    proxy: true,
     store: new RedisStore({
         host: process.env.REDIS_HOST,
         port: process.env.REDIS_PORT,
