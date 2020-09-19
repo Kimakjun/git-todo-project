@@ -3,6 +3,7 @@ const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const path = require('path');
+const cors = require('cors');
 const helmet = require('helmet');
 const hpp = require('hpp');
 const session = require('express-session');
@@ -25,6 +26,7 @@ if(process.env.NODE_ENV === 'production'){
     app.use(morgan('dev'));
 }
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
