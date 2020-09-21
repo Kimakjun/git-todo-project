@@ -1,10 +1,10 @@
 import '../../public/css/header.css';
 import {$el, $new} from '../util/dom';
  
-class Header {
+class Register {
 
     constructor(props){
-        this.el = $new('div', 'headerContainer'); 
+        this.el = $new('div', 'RegisterContainer'); 
         this.create();
         this.addEvent();
       
@@ -28,6 +28,4 @@ class Header {
 }
 
 
-
-
-export default Header;
+export default Register;

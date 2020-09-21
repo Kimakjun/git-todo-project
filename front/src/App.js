@@ -7,8 +7,8 @@ import './index.css';
 export class App{
 
     constructor(root){
-        this.root = root; // root div           // 로그인 정보받아와서 렌더링. 
-        this.user;
+        this.root = root; // root div // 로그인 정보받아와서 렌더링. 
+        this.user = {};
         this.render();
 
     }
@@ -21,10 +21,10 @@ export class App{
 
     async render(){
 
-        await this.fetchUser();
-        
+        await this.fetchUser(); 
+
         if(this.user.id){
-            new Todo(this.root);
+            new Todo({root: this.root, user: this.user});
         }else{
             new IntroPage({root: this.root});
         }

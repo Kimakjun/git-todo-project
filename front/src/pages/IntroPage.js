@@ -1,9 +1,66 @@
 import Header from '../components/Header';
 import axios from 'axios';
 import '../../public/css/login.css'
+import {$el,$new} from '../util/dom';
+import {postData} from '../util/api';
 
 class IntroPage{
-    
+
+    constructor({root}){
+
+        
+        this.root = root;
+        this.header = new Header();
+        this.container = $new('div', 'mainContainer');
+        this.create();
+        this.addEvent();
+        this.render();
+    }
+
+
+    create(){
+
+        this.container.innerHTML = `
+
+            <div class="loginContainer">
+                <input type="email" name="email" id="email" placeholder="email"/>
+                <input type="password" name="pw" id="pw" placeholder="password"/>
+                <input type="button" class="LoginFormButton" id="loginButton" value="login">
+                <input type="button" class="LoginFormButton" id="goToRegister" value="register">
+            </div>
+        `
+
+    }
+
+    addEvent(){
+
+        const button = $el('#loginButton', this.container);
+        button.addEventListener('click',async()=>{
+            const email = $el('#email', this.container).value;
+            const password = $el('#pw', this.container).value;
+            try{
+                const result = await postData('/auth/login', {email, password});
+                window.location.href = '/';
+            }catch(err){
+                alert('invalid input');
+            }
+
+
+        });
+        // button.addEventListener('click', ()=>{
+        //     console.log('test');
+        // })
+
+    }
+
+    render(){
+
+
+        this.root.appendChild(this.header.get());
+        this.root.appendChild(this.container);
+
+    }
+
 }
 
 

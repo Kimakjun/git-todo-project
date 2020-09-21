@@ -1,25 +1,65 @@
 import Header from '../components/Header';
+import {$el, $new} from "../util/dom";
+import {getData} from '../util/api';
+import '../../public/css/todo.css'
 
 
-function Todo(){
+class Todo{
+    constructor(props){
+        const {root, user} = props;
+        this.root = root;
+        this.el = $new('div', 'todoContainer'); 
+        this.user = user;
+        this.boardDatas;
+        this.header = new Header();
 
-    // login 되어있는지, 안되어있는지 판단..
-    // event binding 은 어떻게 할것인지..
-    // css 는 어떻게 연결할 것 인지..
-    const div = document.createElement('div');
-    div.innerHTML = `  
-                        ${Header({name: '김학준'})}
-                        <div>
-                            <p>Todo 페이지</p>
-                            <button id="button">click</button>
+        this.create();
+        this.render();
+    }
+
+    async fetch(){
+        const {data: {resData}} = await getData('/board');
+        return resData;
+    }
+
+    async create(){
+
+        this.boardDatas = await this.fetch();
+
+        
+
+        this.boardDatas.map((data)=>{
+            this.el.innerHTML+=`
+                <div class="todo">
+                    <div class="todoHeader">
+                        <div class="todoHeaderContents">
+                            <div>${data.cards.length}</div>
+                            <div>${data.title}</div>
                         </div>
-                    `
-    div.querySelector('#button').addEventListener('click', ()=>{
-        console.log('test');
-    })
+                        <div class="todoHeaderButtons">
+                            <button class="todoHeaderPlus">+</button>
+                            <button class="todoHeaderDelete">X</button>
+                        </div>
+                    </div>
+                    <div class="cardContainer">
+                    </div>
+                </div>
+        `;   
+        })
+    }
 
-    return div;
+    addEvent(){
+
+
+    }
+
+    render(){
+        this.root.appendChild(this.header.get());
+        this.root.appendChild(this.el);
+
+    }
 
 }
+
 
 export default Todo;
