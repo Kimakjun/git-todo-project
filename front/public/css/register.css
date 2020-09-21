@@ -1,6 +1,4 @@
-
-
-.loginContainer {
+.registerContainer {
     border: 2px solid red;
 
     height: 500px;
@@ -12,7 +10,7 @@
     justify-content: center;
 }
 
-.loginContainer > input {
+.registerContainer > input {
 
     border: 0;
     outline: 0;
@@ -27,7 +25,7 @@
 
 }
 
-.loginContainer > input[type="button"] {
+.registerContainer > input[type="button"] {
 
     background-color: slategray;
 
@@ -36,10 +34,9 @@
     cursor: pointer;
 
     transition: 0.8s;
-    
+
 }
 
-.loginContainer > input[type="button"]:hover {
+.registerContainer > input[type="button"]:hover {
     background-color: thistle;
 }
-

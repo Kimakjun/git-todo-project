@@ -1,3 +1,4 @@
+import Tab from './Tab';
 import '../../public/css/header.css';
 import {$el, $new} from '../util/dom';
  
@@ -5,6 +6,7 @@ class Header {
 
     constructor(props){
         this.el = $new('div', 'headerContainer'); 
+        this.Tab = new Tab({user: props.user});
         this.create();
         this.addEvent();
       
@@ -18,7 +20,13 @@ class Header {
     }
 
     addEvent(){
- 
+        const headerMenu = $el('.headerMenu', this.el);
+        
+        headerMenu.addEventListener('click', ()=> {
+            console.log('hihi');
+            this.el.appendChild(this.Tab.get());
+        })
+
     }
 
     get(){

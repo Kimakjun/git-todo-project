@@ -10,8 +10,11 @@ class Todo{
         this.root = root;
         this.el = $new('div', 'todoContainer'); 
         this.user = user;
+
         this.boardDatas;
-        this.header = new Header();
+
+        //this.Menu = new Menu();
+        this.header = new Header({user});
 
         this.create();
         this.render();
@@ -27,7 +30,6 @@ class Todo{
         this.boardDatas = await this.fetch();
 
         
-
         this.boardDatas.map((data)=>{
             this.el.innerHTML+=`
                 <div class="todo">

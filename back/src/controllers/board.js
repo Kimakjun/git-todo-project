@@ -16,7 +16,7 @@ exports.getBoard = async (req, res, next) => {
              return {...board, cards};
         }))
         // 초기 페이지 작성 데이터 전송.
-        res.status(200).json({success: true, message: 'send all info', data: {resData}});
+        res.status(200).json({success: true, message: 'send all info', resData});
     }catch(err){
         next(createError(500, 'server error'));
     }
