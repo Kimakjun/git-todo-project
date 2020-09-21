@@ -28,8 +28,9 @@ exports.login = async(req, res, next) => {
     try{
         const checkUser = await User.findByEmail(email);
         if(!checkUser[0]) return next(createError(400, 'none exist'));
-    
-        const result = bcrypt.compare(password, checkUser[0].password);
+        
+        const result = await bcrypt.compare(password, checkUser[0].password);
+        console.log(result);
         if(!result) return next(createError(400, 'password incorrect'));
     
         // session 설정.
