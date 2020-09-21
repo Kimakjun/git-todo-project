@@ -3,6 +3,7 @@ const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const path = require('path');
+const cors = require('cors');
 const helmet = require('helmet');
 const hpp = require('hpp');
 const session = require('express-session');
@@ -25,9 +26,10 @@ if(process.env.NODE_ENV === 'production'){
     app.use(morgan('dev'));
 }
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../../front/dist')));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(session({  
     key: 'sid',
@@ -37,6 +39,7 @@ app.use(session({
     cookie: {
     maxAge: 24000 * 60 * 60 // 쿠키 유효기간 24시간
     },
+    proxy: true,
     store: new RedisStore({
         host: process.env.REDIS_HOST,
         port: process.env.REDIS_PORT,
@@ -53,7 +56,7 @@ app.use('/api/v1/', rootRouter);
 
 app.use((req, res, next) => {
     next(createError(404, 'page not found!'));
-  });
+});
 
 app.use((err, req, res, next) => {
     const {status = 500, message = 'server error'} = err;
