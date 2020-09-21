@@ -1,0 +1,23 @@
+.todoContainer{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    overflow: auto;
+
+    width: 100%;
+    padding: 20px;
+
+    border: 1px solid black;
+
+}
+
+.todo{
+    width: 300px;
+    height: 400px;    
+    margin: 0 20px;
+    flex-shrink: 0;
+    border-radius: 10px;
+
+    background-color: gray;
+}

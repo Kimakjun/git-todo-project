@@ -24,11 +24,13 @@ exports.register = async (req, res, next) => {
 exports.login = async(req, res, next) => {
 
     const {email, password} = req.body;
+    console.log('test');
     try{
         const checkUser = await User.findByEmail(email);
         if(!checkUser[0]) return next(createError(400, 'none exist'));
-    
-        const result = bcrypt.compare(password, checkUser[0].password);
+        
+        const result = await bcrypt.compare(password, checkUser[0].password);
+        console.log(result);
         if(!result) return next(createError(400, 'password incorrect'));
     
         // session 설정.
