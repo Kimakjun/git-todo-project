@@ -29,7 +29,7 @@ if(process.env.NODE_ENV === 'production'){
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../../front/dist')));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(session({  
     key: 'sid',

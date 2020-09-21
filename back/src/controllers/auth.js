@@ -24,6 +24,7 @@ exports.register = async (req, res, next) => {
 exports.login = async(req, res, next) => {
 
     const {email, password} = req.body;
+    console.log('test');
     try{
         const checkUser = await User.findByEmail(email);
         if(!checkUser[0]) return next(createError(400, 'none exist'));
