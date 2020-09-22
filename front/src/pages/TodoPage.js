@@ -2,7 +2,7 @@ import Header from '../components/Header';
 import {createBoard} from '../components/Board';
 import {CreateAddedCard} from '../components/AddCard';
 import {$el, $els, $new} from "../util/dom";
-import {getData, postData} from '../util/api';
+import {getData, postData, deleteData} from '../util/api';
 import '../../public/css/todo.css'
 
 class Todo{
@@ -26,7 +26,6 @@ class Todo{
     }
 
     async create(){
-
         this.boardDatas = await this.fetch();  // board 데이타를 받아와서. 
         this.el.innerHTML = '';
         this.boardDatas.map((data)=>{
@@ -52,6 +51,10 @@ class Todo{
                 case 'cardAddButton':
                     this.addCard($targetBoard, curTargetId);
                     break;
+                case 'cardDeleteButton':
+                    const boardId = $el(`.boardId${curTargetId}`, this.el).value;
+                    this.deleteCard(curTargetId, boardId);
+                    break;
             }
         })
 
@@ -60,6 +63,38 @@ class Todo{
             this.addCardInput($targetBoard);
         })
 
+        this.el.addEventListener('ondblclick', ()=> {
+            const $targetBoard = $el(`#board${e.target.id.replace(/[a-zA-Z]+/, '')}`, this.el);
+            this.openBoardUpdateModal();
+        })
+
+
+    }
+
+    openBoardUpdateModal(){
+
+    }
+
+    async deleteCard(targetId, boardId){
+        // const {boardId, content, boardTitle} = req.body;
+        // const id = req.params.id;
+        // console.log(this.boardDatas);
+        // const {content} = this.boardDatas[parseInt(boardId, 10)]
+        //                     .cards.find((card=> card.id === parseInt(targetId, 10)));
+
+        const {id, title, cards}= this.boardDatas.find((boardData)=> boardData.id === parseInt(boardId, 10));
+        const {content} = cards.find((card)=> card.id == parseInt(targetId, 10));
+        
+        try{
+            if(!confirm('정말로 삭제하시겠습니까 ?')) return;
+            // TODO: axios delete 요청시 body 본문 전달 안되는 문제.
+            await deleteData(`/card/${targetId}`, {boardId: id, content: content, boardTitle: title});
+            this.create(); 
+        }catch(err){
+            console.error(err);
+            alert(err);
+        }
+        
     }
 
     async addCard($targetBoard, targetId){
@@ -74,11 +109,10 @@ class Todo{
         }catch(err){
             console.error(err);
             alert('fail');
-        }
-      
+        } 
     }
+
     addCardInput($targetBoard){
-        console.log($targetBoard);
         const cardInput = $el('.addCardInput', $targetBoard);
         if(cardInput.value.length !== 0){
             $el('.cardAddButton', $targetBoard).style.backgroundColor = '#00e676';

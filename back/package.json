@@ -44,9 +44,9 @@
     "nodemon": "^2.0.4",
     "prettier": "^2.1.2"
   },
-  "husky":{
-      "hooks":{
-        "pre-commit": "eslint app.js --fix"
-      }
+  "husky": {
+    "hooks": {
+      "pre-commit": "eslint app.js --fix"
+    }
   }
 }

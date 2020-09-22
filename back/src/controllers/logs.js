@@ -15,6 +15,7 @@ exports.getLog = async(req, res, next) => {
 exports.postLog = async(req, res, next)=>{
     try{
         const logInfo = req.logInfo;
+        console.log(logInfo);
         await Log.create({...logInfo});
         res.status(200).json({success: true, message: 'log is updated'});
     }catch(err){

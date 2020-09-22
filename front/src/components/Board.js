@@ -1,8 +1,7 @@
-import cardlogo from '../images/cardlogo.png'
-import {$el, $new} from '../util/dom';
+import '../../public/css/board.css';
+import {createCard} from './Card';
 
 export const createBoard = (data, user, callback)=>{
-
 
     return  `
             <div class="todo" id="board${data.id}">
@@ -18,12 +17,8 @@ export const createBoard = (data, user, callback)=>{
                 </div>
                 <div class="cardContainer">
                     ${data.cards.reduce((acc, cur)=>{
-                        acc+= `
-                            <div class="card">
-                                <img src=${cardlogo}>${cur.content}
-                                <p class="cardUser">added by ${user.nick}</p>
-                            </div>
-                            `
+                        console.log(data.id)
+                        acc+= createCard(cur.content, user.nick, cur.id, data.id);
                         return acc;
                     }, ``)}
                 </div>
