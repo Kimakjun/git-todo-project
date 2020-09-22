@@ -6,7 +6,7 @@ const url = 'api/v1/';
 const instance = axios.create({
     baseURL: url,
     timeout: 3000,
-    // withCredentials: true,
+    withCredentials: true,
 })
 
 export const getData = (restUrl = '')=>{

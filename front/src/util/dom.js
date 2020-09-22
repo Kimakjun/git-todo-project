@@ -1,6 +1,9 @@
-
 export const $el = (target, base=document)=>{
     return base.querySelector(target);
+}
+
+export const $els = (target, base=document)=>{
+    return base.querySelectorAll(target);
 }
 
 export const $new = (target, className)=>{

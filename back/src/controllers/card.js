@@ -20,12 +20,13 @@ exports.updateCard = async (req, res, next)=> {
 exports.deleteCard = async (req, res, next)=> {
     try{
         const {boardId, content, boardTitle} = req.body;
+        console.log(boardId, content, 'contetvonetno');
         const id = req.params.id;
         await Card.deleteCard(id);    //카드삭제
         await Board.updateCountById({count: -1, id : boardId}) //board Count update.
         req.logInfo = {userId: req.user.id, content: content, action: 'deleted', from: boardTitle, to: ''};
-        next();
-        // res.status(200).json({success : true, message : 'card deleted'});
+        // next();
+        res.status(200).json({success : true, message : 'card deleted'});
     }catch(err){
         next(createError(500, 'server error'));
     }

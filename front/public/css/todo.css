@@ -12,12 +12,4 @@
 
 }
 
-.todo{
-    width: 300px;
-    height: 400px;    
-    margin: 0 20px;
-    flex-shrink: 0;
-    border-radius: 10px;
 
-    background-color: gray;
-}

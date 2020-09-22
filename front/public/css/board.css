@@ -1,0 +1,59 @@
+
+.todo{
+    width: 400px;
+    height: 500px; 
+
+    margin: 0 20px;
+    padding: 10px;
+
+    flex-shrink: 0;
+    border-radius: 10px;
+
+    background-color: #ededed;
+
+    box-shadow: 0px 0px 5px #e0e0e0;
+
+    overflow: auto;
+
+}
+
+
+.todoHeader{
+    display: flex;
+    justify-content: space-between;
+}
+
+.todoHeaderContents > p{
+    display: inline;
+}
+
+.cardCount {
+
+    width: 20px;
+    height: 20px;
+
+    border: 0;
+    outline: 0;
+
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    
+}
+
+.boardTitle {
+    font-weight: 900;
+}
+
+.todoHeaderButtons > button {
+
+    border: 0;
+    outline: 0;
+
+    background-color: #ededed;
+
+    font-size: 15px;
+
+    font-weight: 900;
+    cursor: pointer;
+}
+

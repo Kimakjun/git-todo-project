@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
-    "start": "nodemon ../back/src/app.js",
+    "start": "webpack-dev-server --open",
     "webapp:dev": "concurrently 'npm run bulid' && 'npm run start'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

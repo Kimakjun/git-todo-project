@@ -30,7 +30,6 @@ exports.login = async(req, res, next) => {
         if(!checkUser[0]) return next(createError(400, 'none exist'));
         
         const result = await bcrypt.compare(password, checkUser[0].password);
-        console.log(result);
         if(!result) return next(createError(400, 'password incorrect'));
     
         // session 설정.

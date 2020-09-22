@@ -1,16 +1,15 @@
 import Header from '../components/Header';
 import {$el,$new} from '../util/dom';
 import {postData} from '../util/api';
-import {push} from '../util/link';
+import {linkTo} from '../util/link';
 import '../../public/css/login.css'
 
 class IntroPage{
 
-    constructor({root}){
+    constructor({root, user}){
 
-        
         this.root = root;
-        this.header = new Header();
+        this.header = new Header({user});
 
         this.container = $new('div', 'mainContainer');
         
@@ -41,14 +40,14 @@ class IntroPage{
             const password = $el('#pw', this.container).value;
             try{
                 await postData('/auth/login', {email, password});
-                push('main');
+                linkTo('main');
             }catch(err){
                 alert('check your inputs');
             }
         });
 
         registerButton.addEventListener('click', ()=>{
-            push('register');
+            linkTo('register');
         })
        
 
