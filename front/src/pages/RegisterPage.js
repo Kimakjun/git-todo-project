@@ -2,7 +2,7 @@ import '../../public/css/register.css';
 import Header from '../components/Header';
 import { postData } from '../util/api';
 import {$el, $new} from '../util/dom';
-import {push} from '../util/link';
+import {linkTo} from '../util/link';
 import {isEmail, isPassword, isNick} from '../util/validator'
 
 
@@ -11,7 +11,7 @@ class Register {
     constructor(props){
         this.root = props.root; 
         this.el = $new('div', 'RegisterContainer'); 
-        this.header = new Header();
+        this.header = new Header({user: props.user});
 
         this.create();
         this.addEvent();
@@ -55,7 +55,7 @@ class Register {
 
         const goToLogin = $el('#goToLogin', this.el);
         goToLogin.addEventListener('click', ()=>{
-            push('');
+            linkTo('');
         })
 
 
