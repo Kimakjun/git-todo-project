@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack -w",
     "start": "nodemon ../back/src/app.js",
     "webapp:dev": "concurrently 'npm run bulid' && 'npm run start'",
     "test": "echo \"Error: no test specified\" && exit 1"

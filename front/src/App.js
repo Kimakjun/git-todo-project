@@ -27,8 +27,8 @@ export class App{
 
         if(this.user.id || this.hash === 'main') return new Todo({root: this.root, user: this.user});
         
-        if(this.hash === '') return new IntroPage({root: this.root});
-        if(this.hash === 'register') return new RegisterPage({root: this.root});
+        if(this.hash === '') return new IntroPage({root: this.root, user: this.user});
+        if(this.hash === 'register') return new RegisterPage({root: this.root, user: this.user});
 
     }
 
