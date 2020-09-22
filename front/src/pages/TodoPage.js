@@ -62,10 +62,20 @@ class Todo{
 
     }
 
-    addCard($targetBoard, targetId){
+    async addCard($targetBoard, targetId){
 
+        const cardInput = $el('.addCardInput', $targetBoard).value;
+        const {title, id} = this.boardDatas.find((boardData)=> boardData.id === parseInt(targetId, 10));
 
-
+        if(cardInput.length === 0 || cardInput.length > 500) return alert('fail!!!');
+        try{
+            await postData(`/board/${id}/card`, {content: cardInput, boardTitle: title});
+            this.create(); //전송 해서 새로운 카드 등록되면 다시그리기. 페이지 리로드는 x
+        }catch(err){
+            console.error(err);
+            alert('fail');
+        }
+      
     }
     addCardInput($targetBoard){
         console.log($targetBoard);
