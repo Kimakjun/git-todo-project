@@ -1,4 +1,3 @@
-
 export const $el = (target, base=document)=>{
     return base.querySelector(target);
 }
