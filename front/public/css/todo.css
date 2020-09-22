@@ -142,12 +142,11 @@
     box-shadow: 0px 0px 5px #0000;
 
     font-weight: 900;
-
+    cursor: pointer;
 }
 
 .cardAddButton{
     background-color: #a5d6a7;
-    
     color: white;
 }
 
