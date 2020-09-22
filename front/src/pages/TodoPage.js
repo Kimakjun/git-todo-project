@@ -48,6 +48,7 @@ class Todo{
                     this.addFormCard($targetBoard, curTargetId);
                     break;
                 case 'todoHeaderDelete':
+                    this.deleteBoard(curTargetId);
                     break;
                 case 'cardCancleButton':
                     this.deleteFormCard($targetBoard, curTargetId);
@@ -91,6 +92,7 @@ class Todo{
 
     }
 
+
     openCardUpdateModal(cardId, boardId){
 
         const {cards} = this.boardDatas.find((boardData)=> boardData.id === parseInt(boardId, 10));
@@ -99,10 +101,21 @@ class Todo{
 
     }
 
+
     openBoardUpdateModal(){
         // Modal 속성 show 로 바꿔주기.
         // Modal 의 필요한정보 인자로 넘겨주기. 선택된 board id, 변경된 Title,
         // 보내고 다시 그려주기.
+    }
+
+    async deleteBoard(boardId){
+        try{
+            if(!confirm('포함된 card 가 전부 삭제됩니다. 진행하시겠습니까?')) return;
+            await deleteData(`/board/${boardId}`);
+            this.create();
+        }catch(err){
+            console.error(err);
+        }
     }
 
     async deleteCard(targetId, boardId){
