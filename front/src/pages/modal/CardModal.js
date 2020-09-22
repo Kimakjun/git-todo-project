@@ -1,6 +1,6 @@
 import {$el, $new} from '../../util/dom';
 import '../../../public/css/modal.css' 
-import { putData } from '../../util/api';
+import { postData, putData } from '../../util/api';
 // TODO : 
 // Board Modal 만들필요없이 
 // Card => Modal 로 재활용하기
@@ -13,6 +13,8 @@ class CardModal {
         this.el = $new('div', 'modalContainer'); 
         this.cardId;
         this.content;
+        this.title;
+        this.type;
 
         this.create();
         this.addEvent();
@@ -42,18 +44,44 @@ class CardModal {
             this.el.style.display = 'none';
         });
 
-        const modalBodyInput = $el('.modalBodyInput', this.el);
-        modalBodyInput.addEventListener('change', ()=>{
-            //TODO: .. onchange event...
-        })
+
         // 입력 이벤트
+        const modalInput = $el('.boardInput', this.root);
+        if(modalInput){
+            modalInput.addEventListener('input', ()=>{
+                this.title = modalInput.value;
+            })
+        }
     }
 
-    show(cardId, content){
-       
-        $el('.modalBodyInput').value = content;
-        this.cardId = cardId;
-        this.el.style.display = 'flex';   
+    show(cardId, content, type){
+        this.create();
+        this.addEvent();
+        this.type = type;
+        switch(this.type){
+            case 'CARD_UPDATE':
+                $el('.modalBodyInput').value = content;
+                this.cardId = cardId;
+                break;
+            case 'BOARD_CREATE':
+                // TODO : 코드 리펙토링.
+                $el('.modalBodyInput').value = "";   // input 으로 바꾸고. 스타일변경.
+                const modalBody = $el('.modalBody', this.el);
+                const textInput = $el('.modalBodyInput', this.el);
+                const input = $new('input', 'boardInput');
+                const modalBodyButton = $el('.modalBodyButton', this.el);
+                modalBody.removeChild(textInput);
+                modalBody.insertBefore(input, modalBodyButton)  //부모노드.insertBefore(삽입 할 노드, 기준 점 노드);
+                $el('.modalWrapper').style.height = '170px';
+                this.addEvent();
+                break;
+            case 'BOARD_UPDATE':
+                // 코드 리펙토링.
+                break;
+        }
+
+        this.el.style.display = 'flex'; 
+  
     }
 
     close(){
@@ -61,9 +89,22 @@ class CardModal {
     }
 
     async update(){
-        this.content = $el('.modalBodyInput').value;
-        if(this.content === '') return "fail";
-        await putData(`/card/${this.cardId}/content`, {content: this.content});
+        
+        switch(this.type){
+            case 'CARD_UPDATE':
+                this.content = $el('.modalBodyInput').value;
+                if(this.content === '') return "fail";
+                await putData(`/card/${this.cardId}/content`, {content: this.content});
+                break;
+            case 'BOARD_CREATE':
+                if(this.title === '') return "fail";
+                await postData('/board', {title: this.title});
+                break;
+            case 'BOARD_UPDATE':
+                break;
+        }
+    
+    
     }
 
     render(){

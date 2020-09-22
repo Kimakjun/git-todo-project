@@ -2,7 +2,8 @@ import Header from '../components/Header';
 import CardModal from './modal/CardModal';
 import {createBoard} from '../components/Board';
 import {CreateAddedCard} from '../components/AddCard';
-import {$el, $els, $new} from "../util/dom";
+import {CreateAddedBoard} from '../components/AddBoard';
+import {$el, $new} from "../util/dom";
 import {getData, postData, deleteData} from '../util/api';
 import '../../public/css/todo.css'
 
@@ -31,9 +32,10 @@ class Todo{
     async create(){
         this.boardDatas = await this.fetch();  // board 데이타를 받아와서. 
         this.el.innerHTML = '';
-        this.boardDatas.map((data)=>{
+        this.boardDatas.map((data, index)=>{
             this.el.innerHTML+= createBoard(data, this.user, this.create);
         })
+        this.el.innerHTML+= CreateAddedBoard();
     }
 
     // https://tramyu.github.io/js/javascript-event/ //이벤트 전파
@@ -42,7 +44,7 @@ class Todo{
         this.el.addEventListener('click', (e)=>{
             const curTargetId = e.target.id.replace(/[a-zA-Z]+/,'');
             const $targetBoard = $el(`#board${curTargetId}`, this.el);
-            console.log(e.target.className);
+
             switch(e.target.className){
                 case 'todoHeaderPlus':
                     this.addFormCard($targetBoard, curTargetId);
@@ -60,7 +62,8 @@ class Todo{
                     const boardId = $el(`.boardId${curTargetId}`, this.el).value;
                     this.deleteCard(curTargetId, boardId);
                     break;
-            }
+            }            
+
         })
 
         this.el.addEventListener('input', (e)=> {
@@ -71,13 +74,16 @@ class Todo{
         this.el.addEventListener('dblclick', (e)=> {
             const curTargetId = e.target.id.replace(/[a-zA-Z]+/,'');
             if(e.target.className === 'cardBottomContent' || e.target.className === 'cardHeaderContent'){
-                
                 const boardId = $el(`.boardId${curTargetId}`, this.el).value;
                 this.openCardUpdateModal(curTargetId, boardId);
             }
             if(e.target.className === 'boardTitle'){
                 this.openBoardUpdateModal();
             }
+            if(e.target.classList.contains('addedBoard')){
+                this.cardModal.show('', '', 'BOARD_CREATE');
+            }
+    
 
         })
 
@@ -94,11 +100,9 @@ class Todo{
 
 
     openCardUpdateModal(cardId, boardId){
-
         const {cards} = this.boardDatas.find((boardData)=> boardData.id === parseInt(boardId, 10));
         const {content} = cards.find((card)=> card.id === parseInt(cardId, 10)); 
-        this.cardModal.show(cardId, content, this.create);
-
+        this.cardModal.show(cardId, content, 'CARD_UPDATE');
     }
 
 

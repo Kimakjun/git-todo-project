@@ -83,3 +83,7 @@
 
     cursor: pointer;
 }
+
+.boardInput{
+    margin: 10px 0;
+}

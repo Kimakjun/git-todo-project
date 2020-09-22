@@ -57,3 +57,22 @@
     cursor: pointer;
 }
 
+.addedBoard{
+    height: 200px;
+    border: 1px dashed black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-weight: 900;
+    font-size: large;
+    cursor: pointer;
+
+    transition: 1s;
+}
+
+.addedBoard:hover{
+    background-color: blanchedalmond;
+}
+
+
