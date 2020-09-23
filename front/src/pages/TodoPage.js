@@ -1,8 +1,9 @@
 import Header from '../components/Header';
-import CardModal from './modal/CardModal';
+import Modal from './modal/Modal';
 import {createBoard} from '../components/Board';
 import {CreateAddedCard} from '../components/AddCard';
-import {$el, $els, $new} from "../util/dom";
+import {CreateAddedBoard} from '../components/AddBoard';
+import {$el, $new} from "../util/dom";
 import {getData, postData, deleteData} from '../util/api';
 import '../../public/css/todo.css'
 
@@ -13,8 +14,19 @@ class Todo{
         this.user = user;
         this.boardDatas;
         this.header = new Header({user});
-        this.cardModal = new CardModal({root}); 
- 
+        this.modal = new Modal({root}); 
+        // card 이동을 서버에 보내줘여하는  정보.
+        // const {preCardId, cardId, nextCardId, preBoardId, content, preBoardTitle, boardTitle} = req.body;
+        // const boardId = req.params.id; 
+        this.state = {
+            preCardId : '',
+            cardId: '',
+            nextCardId: '',
+            preBoardId: '',
+            content: '',
+            preBoardTitle: '',
+            boardTtitle: '',
+        }
         this.el = $new('div', 'todoContainer'); 
 
         this.create();
@@ -32,8 +44,9 @@ class Todo{
         this.boardDatas = await this.fetch();  // board 데이타를 받아와서. 
         this.el.innerHTML = '';
         this.boardDatas.map((data)=>{
-            this.el.innerHTML+= createBoard(data, this.user, this.create);
+            this.el.innerHTML+= createBoard(data, this.user);
         })
+        this.el.innerHTML+= CreateAddedBoard();
     }
 
     // https://tramyu.github.io/js/javascript-event/ //이벤트 전파
@@ -42,12 +55,12 @@ class Todo{
         this.el.addEventListener('click', (e)=>{
             const curTargetId = e.target.id.replace(/[a-zA-Z]+/,'');
             const $targetBoard = $el(`#board${curTargetId}`, this.el);
-            console.log(e.target.className);
             switch(e.target.className){
                 case 'todoHeaderPlus':
                     this.addFormCard($targetBoard, curTargetId);
                     break;
                 case 'todoHeaderDelete':
+                    this.deleteBoard(curTargetId);
                     break;
                 case 'cardCancleButton':
                     this.deleteFormCard($targetBoard, curTargetId);
@@ -59,8 +72,21 @@ class Todo{
                     const boardId = $el(`.boardId${curTargetId}`, this.el).value;
                     this.deleteCard(curTargetId, boardId);
                     break;
-            }
+            }            
+        });
+
+        // 드래그 시작
+        this.el.addEventListener('dragstart', (e)=> {
+                if(e.target.className === 'card'){
+                    e.target.classList.add('dragging');
+                }
         })
+
+        // 드래그 종료
+        this.el.addEventListener('dragend', (e)=> {
+                e.target.classList.toggle('dragging');
+        })
+
 
         this.el.addEventListener('input', (e)=> {
             const $targetBoard = $el(`#board${e.target.id.replace(/[a-zA-Z]+/, '')}`, this.el);
@@ -70,39 +96,45 @@ class Todo{
         this.el.addEventListener('dblclick', (e)=> {
             const curTargetId = e.target.id.replace(/[a-zA-Z]+/,'');
             if(e.target.className === 'cardBottomContent' || e.target.className === 'cardHeaderContent'){
-                
                 const boardId = $el(`.boardId${curTargetId}`, this.el).value;
                 this.openCardUpdateModal(curTargetId, boardId);
             }
             if(e.target.className === 'boardTitle'){
-                this.openBoardUpdateModal();
+                this.modal.show(curTargetId, e.target.innerHTML, 'BOARD_UPDATE');
             }
+            if(e.target.classList.contains('addedBoard')){
+                this.modal.show('', '', 'BOARD_CREATE');
+            }
+    
 
         })
 
         this.root.addEventListener('click', async(e)=> {
             if(e.target.className === 'modalBodyButton'){
-                const result = await this.cardModal.update();
+                const result = await this.modal.update();
                 if(result === 'fail') return alert('is empty fail!!');
-                this.cardModal.close();
+                this.modal.close();
                 this.create();
             }
         })
 
     }
 
-    openCardUpdateModal(cardId, boardId){
 
+    openCardUpdateModal(cardId, boardId){
         const {cards} = this.boardDatas.find((boardData)=> boardData.id === parseInt(boardId, 10));
         const {content} = cards.find((card)=> card.id === parseInt(cardId, 10)); 
-        this.cardModal.show(cardId, content, this.create);
-
+        this.modal.show(cardId, content, 'CARD_UPDATE');
     }
 
-    openBoardUpdateModal(){
-        // Modal 속성 show 로 바꿔주기.
-        // Modal 의 필요한정보 인자로 넘겨주기. 선택된 board id, 변경된 Title,
-        // 보내고 다시 그려주기.
+    async deleteBoard(boardId){
+        try{
+            if(!confirm('포함된 card 가 전부 삭제됩니다. 진행하시겠습니까?')) return;
+            await deleteData(`/board/${boardId}`);
+            this.create();
+        }catch(err){
+            console.error(err);
+        }
     }
 
     async deleteCard(targetId, boardId){
