@@ -40,11 +40,12 @@ class Todo{
 
     // https://tramyu.github.io/js/javascript-event/ //이벤트 전파
     eventHandler(){
-        // 이벤트 위임을 통해서 이벤트 등록.
+
+        // 이벤트 위임을 통해서 이벤트 등록. //이벤트 버블링
         this.el.addEventListener('click', (e)=>{
+
             const curTargetId = e.target.id.replace(/[a-zA-Z]+/,'');
             const $targetBoard = $el(`#board${curTargetId}`, this.el);
-
             switch(e.target.className){
                 case 'todoHeaderPlus':
                     this.addFormCard($targetBoard, curTargetId);
@@ -64,7 +65,7 @@ class Todo{
                     break;
             }            
 
-        })
+        });
 
         this.el.addEventListener('input', (e)=> {
             const $targetBoard = $el(`#board${e.target.id.replace(/[a-zA-Z]+/, '')}`, this.el);
@@ -78,7 +79,7 @@ class Todo{
                 this.openCardUpdateModal(curTargetId, boardId);
             }
             if(e.target.className === 'boardTitle'){
-                this.openBoardUpdateModal();
+                this.cardModal.show(curTargetId, '', 'BOARD_UPDATE');
             }
             if(e.target.classList.contains('addedBoard')){
                 this.cardModal.show('', '', 'BOARD_CREATE');
@@ -103,13 +104,6 @@ class Todo{
         const {cards} = this.boardDatas.find((boardData)=> boardData.id === parseInt(boardId, 10));
         const {content} = cards.find((card)=> card.id === parseInt(cardId, 10)); 
         this.cardModal.show(cardId, content, 'CARD_UPDATE');
-    }
-
-
-    openBoardUpdateModal(){
-        // Modal 속성 show 로 바꿔주기.
-        // Modal 의 필요한정보 인자로 넘겨주기. 선택된 board id, 변경된 Title,
-        // 보내고 다시 그려주기.
     }
 
     async deleteBoard(boardId){

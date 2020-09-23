@@ -8,7 +8,7 @@ export const createBoard = (data, user, callback)=>{
                 <div class="todoHeader">
                     <div class="todoHeaderContents">
                         <button class="cardCount">${data.cards.length}</button>
-                        <p class="boardTitle">${data.title}</p>
+                        <p id="board${data.id}" class="boardTitle">${data.title}</p>
                     </div>
                     <div class="todoHeaderButtons">
                         <button class="todoHeaderPlus" id="todoHeaderPlus${data.id}">+</button>

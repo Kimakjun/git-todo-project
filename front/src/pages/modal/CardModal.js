@@ -1,23 +1,21 @@
 import {$el, $new} from '../../util/dom';
 import '../../../public/css/modal.css' 
-import { postData, putData } from '../../util/api';
+import { postData, putData, patchData } from '../../util/api';
 // TODO : 
 // Board Modal 만들필요없이 
 // Card => Modal 로 재활용하기
 
-class CardModal {
+class Modal {
 
     constructor(props){
-
         this.root = props.root;
         this.el = $new('div', 'modalContainer'); 
-        this.cardId;
-        this.content;
-        this.title;
+        this.id;
+        this.value = '';
         this.type;
 
         this.create();
-        this.addEvent();
+        this.addEventHandler();
         this.render();
     }  
 
@@ -25,82 +23,107 @@ class CardModal {
         this.el.innerHTML = `
             <div class="modalWrapper">
                 <div class="modalHeader">
-                    <span class="ModalHeaderTitle">Edit Note</span>
+                    <span class="ModalHeaderTitle">${this.headerTitle}</span>
                     <button class="modalCloseButton">X</button>
                 </div>
                 <div class="modalBody">
-                    <span class="modalBodyTitle">Note</span>
+                    <span class="modalBodyTitle">${this.bodyTitle}</span>
                     <textarea class="modalBodyInput"></textarea>
-                    <button class="modalBodyButton">Save Note</button>
+                    <button class="modalBodyButton">${this.buttonTitle}</button>
                 </div>
             </div>
         `; 
     }
 
-    addEvent(){
-        // 모달창 닫기 이벤트
-        const modalCloseButton = $el('.modalCloseButton', this.el);
-        modalCloseButton.addEventListener('click' ,()=> {
-            this.el.style.display = 'none';
-        });
+    addEventHandler(){
 
+        this.el.addEventListener('click', (e)=>{
+            if(e.target.className === 'modalCloseButton'){
+                this.el.style.display = 'none';
+            }
+        })
 
-        // 입력 이벤트
-        const modalInput = $el('.boardInput', this.root);
-        if(modalInput){
-            modalInput.addEventListener('input', ()=>{
-                this.title = modalInput.value;
-            })
-        }
+        this.el.addEventListener('input', (e)=>{
+            this.value = e.target.value;
+            this.isActive();
+        })
+
     }
 
-    show(cardId, content, type){
-        this.create();
-        this.addEvent();
+    isActive(){
+      
+        if(this.value.length !== 0) $el('.modalBodyButton', this.el).style.backgroundColor = '#00e676';
+        else $el('.modalBodyButton', this.el).style.backgroundColor = '#a5d6a7';
+
+    }
+
+    // 모달 형식에 맞게 모달 디자인,값 변경.
+    show(id, value, type){
+
         this.type = type;
+        this.value = value;
+
         switch(this.type){
-            case 'CARD_UPDATE':
-                $el('.modalBodyInput').value = content;
-                this.cardId = cardId;
+            case 'CARD_UPDATE':{
+                this.setModal({header: 'Edit Note', body: 'note', button: 'Save note'})
+                this.id = id;
                 break;
-            case 'BOARD_CREATE':
+            }
+            case 'BOARD_CREATE':{
                 // TODO : 코드 리펙토링.
-                $el('.modalBodyInput').value = "";   // input 으로 바꾸고. 스타일변경.
-                const modalBody = $el('.modalBody', this.el);
-                const textInput = $el('.modalBodyInput', this.el);
-                const input = $new('input', 'boardInput');
-                const modalBodyButton = $el('.modalBodyButton', this.el);
-                modalBody.removeChild(textInput);
-                modalBody.insertBefore(input, modalBodyButton)  //부모노드.insertBefore(삽입 할 노드, 기준 점 노드);
-                $el('.modalWrapper').style.height = '170px';
-                this.addEvent();
+                this.setModal({header: 'Create Board', body: 'board', button: 'Create board'})
                 break;
-            case 'BOARD_UPDATE':
+            }
+            case 'BOARD_UPDATE':{
                 // 코드 리펙토링.
+                this.setModal({header: 'Board Update', body: 'board', button: 'Update board'})
+                this.id = id;
                 break;
+            }
         }
 
-        this.el.style.display = 'flex'; 
-  
+
+        this.create();
+        if(type !== 'CARD_UPDATE') this.setContainer();
+        if(!!$el('.modalBodyInput', this.el)) $el('.modalBodyInput', this.el).value = value;
+        this.isActive();
+        this.el.style.display = 'flex';   
+    }
+
+    setContainer(){
+        $el('.modalBodyInput').value = "";   // input 으로 바꾸고. 스타일변경.
+        const modalBody = $el('.modalBody', this.el);
+        const textInput = $el('.modalBodyInput', this.el);
+        const input = $new('input', 'boardInput');
+        const modalBodyButton = $el('.modalBodyButton', this.el);
+        modalBody.removeChild(textInput);
+        modalBody.insertBefore(input, modalBodyButton)  //부모노드.insertBefore(삽입 할 노드, 기준 점 노드);
+        $el('.modalWrapper').style.height = '170px';
+    }
+
+    setModal({header, body, button}){
+        this.headerTitle = header;
+        this.bodyTitle = body;
+        this.buttonTitle = button;
     }
 
     close(){
-        this.el.style.display = 'none';   
+        this.create();
+        this.el.style.display = 'none';  
+        this.value = "";
     }
 
     async update(){
-        
+        if(this.value === '') return "fail";
         switch(this.type){
             case 'CARD_UPDATE':
-                this.content = $el('.modalBodyInput').value;
-                if(this.content === '') return "fail";
-                await putData(`/card/${this.cardId}/content`, {content: this.content});
+                await putData(`/card/${this.id}/content`, {content: this.value});
                 break;
             case 'BOARD_CREATE':
-                if(this.title === '') return "fail";
-                await postData('/board', {title: this.title});
+                await postData('/board', {title: this.value});
                 break;
             case 'BOARD_UPDATE':
+                await patchData(`board/${this.id}/title`, {title: this.value});
                 break;
         }
     
@@ -114,4 +137,4 @@ class CardModal {
 }
 
 
-export default CardModal;
+export default Modal;
