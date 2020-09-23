@@ -1,10 +1,11 @@
 import cardlogo from '../images/cardlogo.png';
 import '../../public/css/card.css';
 
-export const createCard = (content, nick, id, boardId)=>{
+export const createCard = (content, nick, id, boardId, boardTitle)=>{
     return `
-        <div class="card" draggable="true">
+        <div class="card" id=cardId${id} draggable="true">
             <input type="hidden" class="boardId${id}" value="${boardId}" />
+            <input type="hidden" class="boardTitle${id}" value="${boardTitle}" />
             <div id="cardHeaderContent${id}" class="cardHeaderContent" >
                 <div>
                     <img src=${cardlogo}>
