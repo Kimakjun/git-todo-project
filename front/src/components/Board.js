@@ -12,7 +12,7 @@ export const createBoard = (data, user, callback)=>{
                     </div>
                     <div class="todoHeaderButtons">
                         <button class="todoHeaderPlus" id="todoHeaderPlus${data.id}">+</button>
-                        <button class="todoHeaderDelete">X</button>
+                        <button class="todoHeaderDelete" id="todoHeaderDelete${data.id}">X</button>
                     </div>
                 </div>
                 <div class="cardContainer">
