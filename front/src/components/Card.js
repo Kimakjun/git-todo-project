@@ -3,7 +3,7 @@ import '../../public/css/card.css';
 
 export const createCard = (content, nick, id, boardId)=>{
     return `
-        <div class="card">
+        <div class="card" draggable="true">
             <input type="hidden" class="boardId${id}" value="${boardId}" />
             <div id="cardHeaderContent${id}" class="cardHeaderContent" >
                 <div>

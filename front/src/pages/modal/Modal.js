@@ -14,6 +14,7 @@ class Modal {
         this.value = '';
         this.type;
 
+
         this.create();
         this.addEventHandler();
         this.render();
@@ -70,12 +71,10 @@ class Modal {
                 break;
             }
             case 'BOARD_CREATE':{
-                // TODO : 코드 리펙토링.
                 this.setModal({header: 'Create Board', body: 'board', button: 'Create board'})
                 break;
             }
             case 'BOARD_UPDATE':{
-                // 코드 리펙토링.
                 this.setModal({header: 'Board Update', body: 'board', button: 'Update board'})
                 this.id = id;
                 break;
@@ -98,6 +97,7 @@ class Modal {
         const modalBodyButton = $el('.modalBodyButton', this.el);
         modalBody.removeChild(textInput);
         modalBody.insertBefore(input, modalBodyButton)  //부모노드.insertBefore(삽입 할 노드, 기준 점 노드);
+        input.value = this.value;
         $el('.modalWrapper').style.height = '170px';
     }
 
@@ -114,6 +114,7 @@ class Modal {
     }
 
     async update(){
+
         if(this.value === '') return "fail";
         switch(this.type){
             case 'CARD_UPDATE':
@@ -125,8 +126,8 @@ class Modal {
             case 'BOARD_UPDATE':
                 await patchData(`board/${this.id}/title`, {title: this.value});
                 break;
-        }
-    
+        };
+        
     
     }
 
