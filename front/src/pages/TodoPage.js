@@ -3,7 +3,7 @@ import Modal from './modal/Modal';
 import {createBoard} from '../components/Board';
 import {CreateAddedCard} from '../components/AddCard';
 import {CreateAddedBoard} from '../components/AddBoard';
-import {$el, $els, $new} from "../util/dom";
+import {$el, $els, $new, setStyle} from "../util/dom";
 import {getData, postData, deleteData, patchData} from '../util/api';
 import '../../public/css/todo.css'
 
@@ -235,10 +235,11 @@ class Todo{
 
     addCardInput($targetBoard){
         const cardInput = $el('.addCardInput', $targetBoard);
+        const cardButton = $el('.cardAddButton', $targetBoard);
         if(cardInput.value.length !== 0){
-            $el('.cardAddButton', $targetBoard).style.backgroundColor = '#00e676';
+            setStyle(cardButton, {backgroundColor: '#00e676'});
         }else{
-            $el('.cardAddButton', $targetBoard).style.backgroundColor = '#a5d6a7';
+            setStyle(cardButton, {backgroundColor: '#a5d6a7'});
         }
     }
 

@@ -12,3 +12,9 @@ export const $new = (target, className)=>{
     return newEl;
 }
 
+export const setStyle = (el, styles)=> {
+    Object.keys(styles).forEach((key)=>{
+        el.style[key] = styles[key];
+    })
+}
+

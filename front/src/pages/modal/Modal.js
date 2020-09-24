@@ -1,4 +1,4 @@
-import {$el, $new} from '../../util/dom';
+import {$el, $new, setStyle} from '../../util/dom';
 import '../../../public/css/modal.css' 
 import { postData, putData, patchData } from '../../util/api';
 // TODO : 
@@ -40,7 +40,7 @@ class Modal {
 
         this.el.addEventListener('click', (e)=>{
             if(e.target.className === 'modalCloseButton'){
-                this.el.style.display = 'none';
+                setStyle(this.el, {display: 'none'});
             }
         })
 
@@ -52,10 +52,9 @@ class Modal {
     }
 
     isActive(){
-      
-        if(this.value.length !== 0) $el('.modalBodyButton', this.el).style.backgroundColor = '#00e676';
-        else $el('.modalBodyButton', this.el).style.backgroundColor = '#a5d6a7';
-
+        const modalButton = $el('.modalBodyButton', this.el);
+        if(this.value.length !== 0) setStyle(modalButton, {backgroundColor: '#00e676'});
+        else setStyle(modalButton, {backgroundColor: '#a5d6a7'}); 
     }
 
     // 모달 형식에 맞게 모달 디자인,값 변경.
