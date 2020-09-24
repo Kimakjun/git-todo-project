@@ -26,6 +26,7 @@ class Header {
 
         headerMenu.addEventListener('click', ()=> {
             this.Tab.get().style.marginRight = "0px";
+            this.Tab.draw();
         })
 
     }

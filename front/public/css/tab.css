@@ -9,27 +9,53 @@
     height: 100%;
 
     margin-right: -300px;
+    padding: 0px !important;
 
-    background-color: gray;
+    overflow: scroll;
+
+    border: 1px solid gray;
+    border-top: none;
+    background-color: #ededed;
     transition: 1s;
+
+    color: black;
 
 }
 
+.tabContainerHeader{
+    
+    display: flex;
+
+    height: 50px;
+    padding: 10px;
+
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid gray;
+
+}
+
+.tabContainerHeaderIcon{
+    font-size: 15px;
+    color: black;
+}
+
+.tabContainerHeaderButtons{
+    display: flex;
+    align-items: center;
+    
+}
+
 .tabContainerButton{
-    width: 30px;
-    height: 30px;
 
-    background-color: slategray;
-
-    padding: 5px;
+    margin : 0 5px;
+    font-weight: bold;
     border: 0;
     outline: 0;
-    border-radius: 50%;
+    transition: 0.5s;
+    cursor: pointer;
 
-    font-weight: bold;
-    color: white;
 
-    transition: 0.5s
 }
 
 .tabContainerButton:hover {
@@ -37,6 +63,40 @@
     box-sizing: 0px 0px 5px #000;
 }
 
-.tabLogoutButton {
-    width: 50px;
+.tabContainerIcon {
+    height: 50px;
+    padding: 15px 10px 10px 10px;
+    border-bottom: 1px solid gray;
+
+    color: black;
+    font-size: 15px;
+}
+
+.tabContainerLogs {
+    background-color: white;
+    overflow: auto;
+}
+
+.logContentContainer{
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    height: 50px;
+    padding: 10px;
+
+    border-bottom: 1px solid gray;
+    color: black;
+    font-size: 11px;
+
+}
+
+.highlite {
+    color: blue;
+}
+
+.bold{
+    font-size: 13px;
+    font-weight: 900;
 }

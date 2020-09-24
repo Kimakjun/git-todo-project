@@ -2,25 +2,37 @@ import '../../public/css/tab.css';
 import {$el, $new} from '../util/dom';
 import {getData} from '../util/api'; 
 import {linkTo} from '../util/link';
+import Log  from './Log';
+
 class Tab {
 
     // TODO : LOG 정보도 알려줘야함.
     constructor(props){
+        
+
         this.user = props.user;
         this.el = $new('div', 'tabContainer'); 
+        this.log = new Log({user: this.user});
         this.create();
         this.addEvent();
-        console.log(this.user.nick !== undefined, "test");
+        
     }  
 
     create(){
         this.el.innerHTML = `
-            <div>  
-                <button type="button" class="tabContainerButton tabCloseButton">X</button>
-                ${this.user.nick !== undefined ? `<button type="button" class="tabContainerButton tabLogoutButton">logout</button>` : ''}
-                <div>${this.user.nick !== undefined ? `hello ${this.user.nick}!` : 'login required'}</h3>
-                <h2>log 정보를 보여줄 곳입니다.!<h2>
-            </div>
+
+                <div class="tabContainerHeader">
+                    <div class="tabContainerHeaderIcon">
+                        📃Menu
+                    </div>
+                    <div class="tabContainerHeaderButtons">
+                        ${this.user.nick !== undefined ? 
+                            `<button type="button" class="tabContainerButton tabLogoutButton">logout</button>` 
+                            : `<button type="button" class="tabContainerButton tabLoginButton">login</button>`}
+                        <button type="button" class="tabContainerButton tabCloseButton">X</button>
+                    </div>
+                </div>
+                <div class="tabContainerIcon">🔔 Activity</div>             
         `;
     }
 
@@ -45,7 +57,12 @@ class Tab {
 
     }
 
+    draw(){
+        this.log.draw();
+    }
+
     get(){
+        this.el.appendChild(this.log.get());
         return this.el;
     }
 
