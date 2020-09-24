@@ -3,29 +3,28 @@ import Modal from './modal/Modal';
 import {createBoard} from '../components/Board';
 import {CreateAddedCard} from '../components/AddCard';
 import {CreateAddedBoard} from '../components/AddBoard';
-import {$el, $new} from "../util/dom";
-import {getData, postData, deleteData} from '../util/api';
+import {$el, $els, $new} from "../util/dom";
+import {getData, postData, deleteData, patchData} from '../util/api';
 import '../../public/css/todo.css'
 
 class Todo{
-    constructor(props){
+        constructor(props){
         const {root, user} = props;
         this.root = root;
         this.user = user;
         this.boardDatas;
         this.header = new Header({user});
         this.modal = new Modal({root}); 
-        // card 이동을 서버에 보내줘여하는  정보.
-        // const {preCardId, cardId, nextCardId, preBoardId, content, preBoardTitle, boardTitle} = req.body;
-        // const boardId = req.params.id; 
+
         this.state = {
             preCardId : '',
             cardId: '',
             nextCardId: '',
             preBoardId: '',
+            boardId: '',
             content: '',
             preBoardTitle: '',
-            boardTtitle: '',
+            boardTitle: '',
         }
         this.el = $new('div', 'todoContainer'); 
 
@@ -47,6 +46,7 @@ class Todo{
             this.el.innerHTML+= createBoard(data, this.user);
         })
         this.el.innerHTML+= CreateAddedBoard();
+        this.dragAndDrop();
     }
 
     // https://tramyu.github.io/js/javascript-event/ //이벤트 전파
@@ -72,21 +72,10 @@ class Todo{
                     const boardId = $el(`.boardId${curTargetId}`, this.el).value;
                     this.deleteCard(curTargetId, boardId);
                     break;
-            }            
+            } 
         });
 
-        // 드래그 시작
-        this.el.addEventListener('dragstart', (e)=> {
-                if(e.target.className === 'card'){
-                    e.target.classList.add('dragging');
-                }
-        })
-
-        // 드래그 종료
-        this.el.addEventListener('dragend', (e)=> {
-                e.target.classList.toggle('dragging');
-        })
-
+        
 
         this.el.addEventListener('input', (e)=> {
             const $targetBoard = $el(`#board${e.target.id.replace(/[a-zA-Z]+/, '')}`, this.el);
@@ -109,6 +98,33 @@ class Todo{
 
         })
 
+        // 드래그 시작
+        // const {preCardId, cardId, nextCardId, preBoardId x, content x, preBoardTitle x, boardTitle} = req.body;
+                 // const boardId = req.params.id; 
+        this.el.addEventListener('dragstart', (e)=> {
+            if(e.target.className === 'card'){
+                this.state.cardId = e.target.id.replace(/[a-zA-Z]+/,'');
+                this.state.preBoardId = $el(`.boardId${this.state.cardId}`, e.target).value;
+                this.state.preBoardTitle = $el(`.boardTitle${this.state.cardId}`, e.target).value;
+                this.state.content = $el('.cardHeaderContentTitle', e.target).innerText;
+                
+                e.target.classList.add('dragging');
+            }
+        })
+
+        // 드래그 종료 => 결과 전송, 상태 초기화...
+        this.el.addEventListener('dragend', async(e)=> {
+            e.target.classList.toggle('dragging');
+            try{
+                await patchData(`/board/${this.state.boardId}/card`, this.state);
+                Object.keys(this.state).map((key)=> this.state[key] = ""); //초기화
+                this.create();
+            }catch(err){
+                console.error(err);
+            }
+
+        })
+    
         this.root.addEventListener('click', async(e)=> {
             if(e.target.className === 'modalBodyButton'){
                 const result = await this.modal.update();
@@ -120,6 +136,53 @@ class Todo{
 
     }
 
+
+    dragAndDrop(){
+
+        const containers = $els('.cardContainer', this.el);
+        containers.forEach((container) => {
+            container.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                const nextElement = this.getNextElement(container, e.clientY);
+                const draggingCard = this.el.querySelector('.dragging');
+                this.state.boardTitle = $el('.cardContainerBoardTitle', container).value;
+                this.state.boardId = $el('.cardContainerBoardId', container).value;
+
+                if(nextElement == null){
+                    if(draggingCard.previousElementSibling !== null){
+                        this.state.nextCardId = '';
+                        this.state.preCardId = draggingCard.previousElementSibling.id.replace(/[a-zA-Z]+/,'');
+                    }else{
+                        this.state.nextCardId = '';
+                        this.state.preCardId = '';
+                    }
+
+                    container.appendChild(draggingCard);
+                }else{
+                    if(draggingCard.previousElementSibling === null){
+                        this.state.preCardId = '';
+                        this.state.nextCardId = nextElement.id.replace(/[a-zA-Z]+/,'');
+                    }
+                    else{
+                        this.state.preCardId = draggingCard.previousElementSibling.id.replace(/[a-zA-Z]+/,'');
+                        this.state.nextCardId = nextElement.id.replace(/[a-zA-Z]+/,'');
+                    }
+                    container.insertBefore(draggingCard, nextElement);
+                }
+            })
+        })
+
+    }
+
+    getNextElement(board, y){
+        const curBoardElements = [...board.querySelectorAll('.card:not(.dragging)')]; // 현재 드래깅 제외 나머지
+        return curBoardElements.reduce((closeset, child)=>{
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2; 
+            if(offset < 0 && offset > closeset.offset) return {offset: offset, element: child}
+            else return closeset;
+        }, {offset: Number.NEGATIVE_INFINITY}).element; 
+    }
 
     openCardUpdateModal(cardId, boardId){
         const {cards} = this.boardDatas.find((boardData)=> boardData.id === parseInt(boardId, 10));
@@ -163,6 +226,7 @@ class Todo{
         try{
             await postData(`/board/${id}/card`, {content: cardInput, boardTitle: title});
             this.create(); //전송 해서 새로운 카드 등록되면 다시그리기. 페이지 리로드는 x
+            
         }catch(err){
             console.error(err);
             alert('fail');
@@ -179,7 +243,6 @@ class Todo{
     }
 
     addFormCard($targetBoard, curTargetId){
-        console.log($targetBoard);
         const cardContainer = $targetBoard.lastElementChild;
         const addedCardContainer = $el('.addCardContainer', cardContainer);
 

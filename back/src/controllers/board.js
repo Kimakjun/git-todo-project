@@ -101,28 +101,30 @@ exports.moveCard = async(req, res, next)=> {
     const [INITPOSITION, MAKEHALF, ADDONE] = [1, 2, 3]; 
     const {preCardId, cardId, nextCardId, preBoardId, content, preBoardTitle, boardTitle} = req.body;
     const boardId = req.params.id;
+    console.log(preCardId, cardId, nextCardId, preBoardId, content, preBoardTitle, boardTitle);
     // 카드가 아무것도 없는 곳으로 이동하는경우 => position 설정
     // TODO : 로직수정, FRONT 에서 주는 정보에다라 DB 접근할 필요없을듯.
     try{  
         const cards = await Card.getCards(req.user.id, boardId);
-        if(cards.length === 0){
+        if(cards[0].length === 0){
+            console.log('test~!!~!~');
             await Card.updatePosition({id: cardId, boardId: boardId, position: INITPOSITION});
         }
         // 사이로 이동하는경우.
-        if(preCardId && nextCardId){
+        if(preCardId !== "" && nextCardId != ""){
             const preCard = await Card.getCardById({cardId: preCardId});
             const nextCard = await Card.getCardById({cardId: nextCardId});
             const newPosition = (preCard.position + nextCard.position) / MAKEHALF; 
             await Card.updatePosition({id: cardId, boardId: boardId, position: newPosition});
         }
         // 맨앞으로 이동하는경우
-        if(!preCardId && nextCardId){
+        if(preCardId == "" && nextCardId != ""){
             const nextCard = await Card.getCardById({cardId: nextCardId});
             const newPosition = nextCard.position / MAKEHALF; 
             await Card.updatePosition({id: cardId, boardId: boardId, position: newPosition});
         }
         // 맨뒤로 이동하는경우
-        if(preCardId && !nextCardId){
+        if(preCardId != "" && nextCardId == ""){
             const preCard = await Card.getCardById({cardId: preCardId});
             const newPosition = preCard.position + ADDONE; 
             await Card.updatePosition({id: cardId, boardId: boardId, position: newPosition});

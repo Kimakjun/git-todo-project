@@ -3,7 +3,7 @@ import {createCard} from './Card';
 
 export const createBoard = (data, user, callback)=>{
 
-    
+
 
     return  `
             <div class="todo" id="board${data.id}">
@@ -18,9 +18,11 @@ export const createBoard = (data, user, callback)=>{
                     </div>
                 </div>
                 <div class="cardContainer">
+                    <input type="hidden" class="cardContainerBoardTitle" value="${data.title}"/>
+                    <input type="hidden" class="cardContainerBoardId" value="${data.id}"/>
                     ${data.cards.reduce((acc, cur)=>{
                         console.log(data.id)
-                        acc+= createCard(cur.content, user.nick, cur.id, data.id);
+                        acc+= createCard(cur.content, user.nick, cur.id, data.id, data.title);
                         return acc;
                     }, ``)}
                 </div>
