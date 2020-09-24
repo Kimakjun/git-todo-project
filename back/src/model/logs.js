@@ -15,7 +15,7 @@ Log.create = async({userId, content, action, from, to}) => {
 
 Log.getLogsById = async({userId}) => {
     try{
-        const [rows, field] = await pool.query('select * from logs where user_id = ? order by create_time',[userId]);
+        const [rows, field] = await pool.query('select * from logs where user_id = ? order by create_time DESC',[userId]);
         return rows;
     }catch(err){
         throw new Error(err);

@@ -107,7 +107,6 @@ exports.moveCard = async(req, res, next)=> {
     try{  
         const cards = await Card.getCards(req.user.id, boardId);
         if(cards[0].length === 0){
-            console.log('test~!!~!~');
             await Card.updatePosition({id: cardId, boardId: boardId, position: INITPOSITION});
         }
         // 사이로 이동하는경우.
