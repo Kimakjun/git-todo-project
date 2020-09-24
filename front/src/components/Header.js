@@ -1,12 +1,11 @@
 import Tab from './Tab';
 import '../../public/css/header.css';
-import {$el, $new} from '../util/dom';
+import {$el, $new, setStyle} from '../util/dom';
  
 class Header {
 
     constructor(props){
         this.el = $new('div', 'headerContainer'); 
-        console.log(props);
         this.Tab = new Tab({user: props.user});
         this.create();
         this.addEvent();
@@ -25,7 +24,7 @@ class Header {
         const headerMenu = $el('.headerMenu', this.el);
 
         headerMenu.addEventListener('click', ()=> {
-            this.Tab.get().style.marginRight = "0px";
+            setStyle(this.Tab.get(), {marginRight: '0px'});
             this.Tab.draw();
         })
 

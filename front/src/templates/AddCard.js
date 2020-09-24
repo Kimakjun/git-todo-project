@@ -1,5 +1,5 @@
 
-export const CreateAddedCard = (id)=>{
+export const createAddedCard = (id)=>{
     return `
         <input type="textarea" id ="addCardInput${id}" class="addCardInput" placeholder="Enter a Note"/>
         <div class="cardButtons">

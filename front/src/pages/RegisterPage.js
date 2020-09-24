@@ -4,7 +4,7 @@ import { postData } from '../util/api';
 import {$el, $new} from '../util/dom';
 import {linkTo} from '../util/link';
 import {isEmail, isPassword, isNick} from '../util/validator'
-
+import {createRegister} from '../templates/Register';
 
 class Register {
 
@@ -19,15 +19,7 @@ class Register {
     }  
 
     create(){
-        this.el.innerHTML = `
-            <div class="registerContainer">
-                <input type="email" name="email" id="email" placeholder="email" />
-                <input type="password" name="pw" id="pw" placeholder="password"/>
-                <input type="text" name="nick" id="nick" placeholder="nick"/>
-                <input type="button" class="registerFormButton" id="registerButton" value="register">
-                <input type="button" class="registerFormButton" id="goToLogin" value="go to login">
-            </div>
-        `;
+        this.el.innerHTML = createRegister();
     }
 
     addEvent(){

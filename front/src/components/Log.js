@@ -74,6 +74,7 @@ class Log{
         
          this.el.innerHTML = '';
          const logs = await this.fetch();
+         if(logs === undefined) return;
          this.el.innerHTML+= this.makeLogForm(logs);
 
     }

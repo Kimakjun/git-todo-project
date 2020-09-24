@@ -1,8 +1,8 @@
-export const $el = (target, base=document)=>{
+export const $el = (target, base = document)=>{
     return base.querySelector(target);
 }
 
-export const $els = (target, base=document)=>{
+export const $els = (target, base = document )=>{
     return base.querySelectorAll(target);
 }
 

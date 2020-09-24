@@ -1,15 +1,13 @@
 import {$el, $new, setStyle} from '../../util/dom';
 import '../../../public/css/modal.css' 
 import { postData, putData, patchData } from '../../util/api';
-// TODO : 
-// Board Modal 만들필요없이 
-// Card => Modal 로 재활용하기
 
 class Modal {
 
     constructor(props){
         this.root = props.root;
         this.el = $new('div', 'modalContainer'); 
+        this.reDraw = props.reDraw;
         this.id;
         this.value = '';
         this.type;
@@ -47,6 +45,15 @@ class Modal {
         this.el.addEventListener('input', (e)=>{
             this.value = e.target.value;
             this.isActive();
+        })
+
+        this.root.addEventListener('click', async(e)=> {
+            if(e.target.className === 'modalBodyButton'){
+                const result = await this.update();
+                if(result === 'fail') return alert('is empty fail!!');
+                this.close(); 
+                this.reDraw();
+            }
         })
 
     }

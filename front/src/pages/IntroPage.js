@@ -2,7 +2,7 @@ import Header from '../components/Header';
 import {$el,$new} from '../util/dom';
 import {postData} from '../util/api';
 import {linkTo} from '../util/link';
-import '../../public/css/login.css'
+import {createLogin} from '../templates/Login';
 
 class IntroPage{
 
@@ -20,16 +20,8 @@ class IntroPage{
 
     create(){
 
-        this.container.innerHTML = `
-            <div class="loginContainer">
-                <input type="email" name="email" id="email" placeholder="email"/>
-                <input type="password" name="pw" id="pw" placeholder="password"/>
-                <input type="button" class="LoginFormButton" id="loginButton" value="login">
-                <input type="button" class="LoginFormButton" id="goToRegister" value="to to register">
-            </div>
-        `
+        this.container.innerHTML = createLogin();
     }
-
 
     addEvent(){
         const button = $el('#loginButton', this.container);
