@@ -4,6 +4,7 @@ import {createAddedBoard} from '../templates/AddBoard'
 import {createAddedCard} from '../templates/AddCard'
 import {$el, $els, $new} from '../util/dom';
 import {deleteData} from '../util/api';
+import { getIntegerId } from '../util/validator';
 
 class Board {
 
@@ -57,7 +58,7 @@ class Board {
         
         todoHeaderPlusButtons.forEach((todoHeaderPlusButton)=>{
             todoHeaderPlusButton.addEventListener('click', (e)=>{
-                const curTargetId = e.target.id.replace(/[a-zA-Z]+/,'');
+                const curTargetId = getIntegerId(e.target.id);
                 const $targetBoard = $el(`#board${curTargetId}`, this.el);
                 this.addFormCard($targetBoard, curTargetId)
             });
@@ -65,7 +66,7 @@ class Board {
        
         todoHeaderDeleteButtons.forEach((todoHeaderDeleteButton)=>{
             todoHeaderDeleteButton.addEventListener('click',(e)=>{
-                const curTargetId = e.target.id.replace(/[a-zA-Z]+/,'');
+                const curTargetId = getIntegerId(e.target.id);
                 this.deleteBoard(curTargetId)
             });    
         })

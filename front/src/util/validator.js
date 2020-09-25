@@ -1,7 +1,7 @@
 const Regex = {
     email : /^[\w]([-_.]?[\w])*@[\w]([-_.]?[\w])*\.[a-zA-Z]{2,3}/i,
     password: /^[a-zA-Z0-9]{6,15}/,
-    nick: /[a-zA-Z가-힣]{3,30}/,
+    nick: /[a-zA-Z가-힣]{3,30}/
 }
 
 exports.isEmail=(maybeEmail)=>{
@@ -25,3 +25,6 @@ exports.isContent=(maybeContent)=>{
     return (contentLength > 0 && contentLength <= 500);
 }
 
+exports.getIntegerId=(targetId)=>{
+    return targetId.replace(/[a-zA-Z]+/, '');
+}

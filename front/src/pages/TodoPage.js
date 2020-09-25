@@ -2,6 +2,7 @@ import Header from '../components/Header';
 import Modal from './modal/Modal';
 import {$el, $els, $new, setStyle} from "../util/dom";
 import {getData, patchData} from '../util/api';
+import {getIntegerId} from '../util/validator';
 import '../../public/css/todo.css'
 import Board from '../components/Board';
 
@@ -47,12 +48,12 @@ class Todo{
     eventHandler(){
        
         this.el.addEventListener('input', (e)=> {
-            const $targetBoard = $el(`#board${e.target.id.replace(/[a-zA-Z]+/, '')}`, this.el);
-            this.addCardInput($targetBoard);
+            const $targetBoard = $el(`#board${getIntegerId(e.target.id)}`, this.el);
+            this.checkInputs($targetBoard);
         })
 
         this.el.addEventListener('dblclick', (e)=> {
-            const curTargetId = e.target.id.replace(/[a-zA-Z]+/,'');
+            const curTargetId = getIntegerId(e.target.id);
             if(e.target.className === 'cardBottomContent' || e.target.className === 'cardHeaderContent'){
                 const boardId = $el(`.boardId${curTargetId}`, this.el).value;
                 this.openCardUpdateModal(curTargetId, boardId);
@@ -67,7 +68,7 @@ class Todo{
 
         this.el.addEventListener('dragstart', (e)=> {
             if(e.target.className === 'card'){
-                this.state.cardId = e.target.id.replace(/[a-zA-Z]+/,'');
+                this.state.cardId = getIntegerId(e.target.id);
                 this.state.preBoardId = $el(`.boardId${this.state.cardId}`, e.target).value;
                 this.state.preBoardTitle = $el(`.boardTitle${this.state.cardId}`, e.target).value;
                 this.state.content = $el('.cardHeaderContentTitle', e.target).innerText;
@@ -104,7 +105,7 @@ class Todo{
                 if(nextElement == null){
                     if(draggingCard.previousElementSibling !== null){
                         this.state.nextCardId = '';
-                        this.state.preCardId = draggingCard.previousElementSibling.id.replace(/[a-zA-Z]+/,'');
+                        this.state.preCardId = getIntegerId(draggingCard.previousElementSibling.id);
                     }else{
                         this.state.nextCardId = '';
                         this.state.preCardId = '';
@@ -113,11 +114,11 @@ class Todo{
                 }else{
                     if(draggingCard.previousElementSibling === null){
                         this.state.preCardId = '';
-                        this.state.nextCardId = nextElement.id.replace(/[a-zA-Z]+/,'');
+                        this.state.nextCardId = getIntegerId(nextElement.id);
                     }
                     else{
-                        this.state.preCardId = draggingCard.previousElementSibling.id.replace(/[a-zA-Z]+/,'');
-                        this.state.nextCardId = nextElement.id.replace(/[a-zA-Z]+/,'');
+                        this.state.preCardId = getIntegerId(draggingCard.previousElementSibling.id);
+                        this.state.nextCardId = getIntegerId(nextElement.id);
                     }
                     container.insertBefore(draggingCard, nextElement);
                 }
@@ -142,7 +143,7 @@ class Todo{
         this.modal.show(cardId, content, 'CARD_UPDATE');
     }
    
-    addCardInput($targetBoard){
+    checkInputs($targetBoard){
         const cardInput = $el('.addCardInput', $targetBoard);
         const cardButton = $el('.cardAddButton', $targetBoard);
         if(cardInput.value.length !== 0){

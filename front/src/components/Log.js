@@ -24,16 +24,13 @@ class Log{
 
     makeLog({nick, action, content, from, to}){
 
-        switch(action){
-            case 'added':
-                return `<span class="highlite">${nick}</span> added <span class="highlite">${content}</span> to <span class="bold">${to}</span>`
-            case 'deleted':
-                return `<span class="highlite">${nick}</span> remove <span class="highlite">${content}</span>`
-            case 'updated':
-                return `<span class="highlite">${nick}</span> updated <span class="highlite">${content}</span>`;
-            case 'moved':
-                return `<span class="highlite">${nick}</span> moved <span class="highlite">${content}</span> from <span class="bold">${from}</span> to <span class="bold">${to}</span>`;
-        }
+        return `
+                <span class="highlite">${nick}</span> 
+                ${action} <span class="highlite">${content}</span>  
+                ${from ? `to <span class="bold">${from}</span>` : ''}
+                ${to ? `to <span class="bold">${to}</span>` : ''}
+            `; 
+
     }
 
     makeTime(createdTime){
