@@ -3,6 +3,22 @@
 
 ### [TODO SERVICE LINK](http://115.85.183.220/) 
 
+### Getting Start 
+    mysql -u root -p < mysql/seed.sql
+    cd javascript-w3-todo\back
+    npm i
+    
+    cd javascript-w3-todo\front
+    npm i
+    npm run build
+    
+    cd javascript-w3-todo\back
+    npm run dev
+
+    .env => javascript-w3-todo/back/.env.example 
+
+
+
 ## day1
 
 1. express 기본 세팅
