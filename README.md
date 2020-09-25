@@ -5,6 +5,7 @@
 
 ### Getting Start 
     mysql -u root -p < mysql/seed.sql
+    
     cd javascript-w3-todo\back
     npm i
     
